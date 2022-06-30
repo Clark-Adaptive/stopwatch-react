@@ -1,0 +1,15 @@
+.time-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 500px;
+}
+
+.time-text {
+  font-style: normal;
+  font-size: 72px;
+  font-weight: lighter;
+  line-height: 78px;
+  font-variant-numeric: tabular-nums;
+}
