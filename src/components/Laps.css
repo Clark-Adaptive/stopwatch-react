@@ -1,0 +1,32 @@
+.lap-container {
+  overflow: auto;
+  height: 500px;
+  max-height: 500px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 90%;
+}
+
+.lap-time {
+  font-variant-numeric: tabular-nums;
+}
+
+.max-lap {
+  color: rgb(255, 69, 58);
+}
+
+.min-lap {
+  color: rgb(48, 209, 88);
+}
+
+.row-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-top: 1px solid rgba(128, 128, 128, 0.725);
+  line-height: 12px;
+}
+
+.blank-row {
+  color: black;
+}

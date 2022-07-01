@@ -5,6 +5,7 @@ body {
   font-family: "SF Pro Text";
   user-select: none;
 }
+
 .content-container {
   background: black;
   display: flex;
@@ -17,107 +18,6 @@ body {
   align-items: center;
   border-radius: 25px;
   /* background: teal; */
-}
-
-.button-container {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 50vw;
-  margin: auto;
-}
-
-.lap-container {
-  overflow: auto;
-  height: 500px;
-  max-height: 500px;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 90%;
-}
-
-.lap-time {
-  font-variant-numeric: tabular-nums;
-}
-
-.max-lap {
-  color: rgb(255, 69, 58);
-}
-
-.min-lap {
-  color: rgb(48, 209, 88);
-}
-
-.row-container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  border-top: 1px solid rgba(128, 128, 128, 0.725);
-  line-height: 12px;
-}
-
-.blank-row {
-  color: black;
-}
-
-.apple-button {
-  /* 🌝 Button / iPhone / Apple Round */
-
-  /* Auto layout */
-  color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0px;
-  margin-left: 25px;
-  margin-right: 25px;
-  width: 60px;
-  height: 60px;
-  /* iPhone & iPad/🌝 Background/Primary */
-  background: #ffffff;
-  border-radius: 43px;
-  border: none;
-  /* Inside auto layout */
-
-  flex: none;
-  order: 2;
-  flex-grow: 0;
-}
-
-.start-button {
-  background: #145e27bb;
-  box-shadow: 0 0 0 2px black, 0 0 0 4px #145e27bb;
-  color: #30d158;
-}
-
-.start-button:hover {
-  background: #16682a;
-  box-shadow: 0 0 0 2px black, 0 0 0 4px #16682a;
-}
-
-.stop-button {
-  background: #d330277c;
-  box-shadow: 0 0 0 2px black, 0 0 0 4px #d330277c;
-  color: #ff3b30;
-}
-
-.stop-button:hover {
-  background: #ae2720d8;
-  box-shadow: 0 0 0 2px black, 0 0 0 4px #ae2720d8;
-}
-
-.lap-button,
-.reset-button {
-  background: #69696d;
-  box-shadow: 0 0 0 2px black, 0 0 0 4px #69696d;
-}
-
-.lap-button:hover,
-.reset-button:hover {
-  background: #8e8e93;
-  box-shadow: 0 0 0 2px black, 0 0 0 4px #8e8e93;
 }
 
 ::-webkit-scrollbar {

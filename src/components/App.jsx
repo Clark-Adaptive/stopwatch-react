@@ -1,19 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 import Time from "./Time";
+import Buttons from "./Buttons";
+import Laps from "./Laps";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [totalElapsedTime, setTotalElapsedTime] = useState(0);
+
+  useEffect(startStopStopwatch, [isTimerRunning]);
+
+  function startStopStopwatch() {
+    if (isTimerRunning) {
+      // start the stopwatch
+      let startTime = Date.now();
+      const intervalID = setInterval(() => {
+        setTotalElapsedTime(Date.now() - startTime + totalElapsedTime);
+      }, 1000 / 60);
+      return () => {
+        // console.log("clearing interval");
+        clearInterval(intervalID);
+      };
+    } else {
+      // stop the stopwatch, at the moment, it seems I don't actually need to do anything
+    }
+  }
 
   return (
     <main className="content-container">
-      <Time />
-      <section className="button-container">
-        <div id="left-button-container"></div>
-        <div id="right-button-container"></div>
-      </section>{" "}
-      <ul className="lap-container"></ul>
+      <Time totalElapsedTime={totalElapsedTime} />
+      <Buttons
+        setTotalElapsedTime={setTotalElapsedTime}
+        isTimerRunning={isTimerRunning}
+        setIsTimerRunning={setIsTimerRunning}
+      />
+      <Laps />
     </main>
   );
 }

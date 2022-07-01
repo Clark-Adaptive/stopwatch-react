@@ -1,10 +1,31 @@
 import "./Buttons.css";
 
-function Buttons() {
+//component
+function Buttons({ setTotalElapsedTime, isTimerRunning, setIsTimerRunning }) {
   return (
     <section className="button-container">
-      <div id="left-button-container"></div>
-      <div id="right-button-container"></div>
+      <button
+        id="left-button"
+        className={
+          "apple-button " + (isTimerRunning ? "lap-button" : "reset-button")
+        }
+        onClick={() => {
+          isTimerRunning ? console.log("lap") : setTotalElapsedTime(0);
+        }}
+      >
+        {isTimerRunning ? "Lap" : "Reset"}
+      </button>
+      <button
+        id="right-button"
+        className={
+          "apple-button " + (isTimerRunning ? "stop-button" : "start-button")
+        }
+        onClick={() => {
+          isTimerRunning ? setIsTimerRunning(false) : setIsTimerRunning(true);
+        }}
+      >
+        {isTimerRunning ? "Stop" : "Start"}
+      </button>
     </section>
   );
 }
