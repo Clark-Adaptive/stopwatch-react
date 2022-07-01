@@ -8,6 +8,7 @@ import Laps from "./Laps";
 function App() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [totalElapsedTime, setTotalElapsedTime] = useState(0);
+  const [laps, updateLaps] = useState([]);
 
   useEffect(startStopStopwatch, [isTimerRunning]);
 
@@ -34,8 +35,9 @@ function App() {
         setTotalElapsedTime={setTotalElapsedTime}
         isTimerRunning={isTimerRunning}
         setIsTimerRunning={setIsTimerRunning}
+        updateLaps={updateLaps}
       />
-      <Laps />
+      <Laps laps={laps} totalElapsedTime={totalElapsedTime} />
     </main>
   );
 }
