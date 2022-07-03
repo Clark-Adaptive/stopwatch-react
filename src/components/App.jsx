@@ -31,6 +31,7 @@ function App() {
 
   function reset() {
     setTotalElapsedTime(0);
+    setSumOfAllLapTimes(0);
     updateLaps([]);
   }
 
