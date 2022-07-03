@@ -9,6 +9,7 @@ function App() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [totalElapsedTime, setTotalElapsedTime] = useState(0);
   const [laps, updateLaps] = useState([]);
+  const [sumOfAllLapTimes, setSumOfAllLapTimes] = useState(0);
 
   useEffect(startStopStopwatch, [isTimerRunning]);
 
@@ -32,10 +33,14 @@ function App() {
     <main className="content-container">
       <Time totalElapsedTime={totalElapsedTime} />
       <Buttons
+        totalElapsedTime={totalElapsedTime}
         setTotalElapsedTime={setTotalElapsedTime}
         isTimerRunning={isTimerRunning}
         setIsTimerRunning={setIsTimerRunning}
+        laps={laps}
         updateLaps={updateLaps}
+        sumOfAllLapTimes={sumOfAllLapTimes}
+        setSumOfAllLapTimes={setSumOfAllLapTimes}
       />
       <Laps laps={laps} totalElapsedTime={totalElapsedTime} />
     </main>
