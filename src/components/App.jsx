@@ -29,6 +29,11 @@ function App() {
     }
   }
 
+  function reset() {
+    setTotalElapsedTime(0);
+    updateLaps([]);
+  }
+
   return (
     <main className="content-container">
       <Time totalElapsedTime={totalElapsedTime} />
@@ -41,6 +46,7 @@ function App() {
         updateLaps={updateLaps}
         sumOfAllLapTimes={sumOfAllLapTimes}
         setSumOfAllLapTimes={setSumOfAllLapTimes}
+        reset={reset}
       />
       <Laps laps={laps} totalElapsedTime={totalElapsedTime} />
     </main>

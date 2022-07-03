@@ -3,13 +3,13 @@ import "./Buttons.css";
 //component
 function Buttons({
   totalElapsedTime,
-  setTotalElapsedTime,
   isTimerRunning,
   setIsTimerRunning,
   laps,
   updateLaps,
   sumOfAllLapTimes,
   setSumOfAllLapTimes,
+  reset,
 }) {
   function handleLap() {
     console.log(laps);
@@ -28,7 +28,7 @@ function Buttons({
           "apple-button " + (isTimerRunning ? "lap-button" : "reset-button")
         }
         onClick={() => {
-          isTimerRunning ? handleLap() : setTotalElapsedTime(0);
+          isTimerRunning ? handleLap() : reset();
         }}
       >
         {isTimerRunning ? "Lap" : "Reset"}

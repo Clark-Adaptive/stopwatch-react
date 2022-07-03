@@ -1,7 +1,7 @@
 import "./Laps.css";
 import { useState, useEffect } from "react";
 
-function Laps({ laps, updateLaps, totalElapsedTime }) {
+function Laps({ laps }) {
   const [slowLapIndex, setSlowLapIndex] = useState(0);
   const [slowLapTime, setSlowLapTime] = useState(Number.NEGATIVE_INFINITY);
   const [fastLapIndex, setFastLapIndex] = useState(0);
