@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
-
+import "./Laps.css";
 import Time from "./Time";
 import Buttons from "./Buttons";
 import LiveLap from "./LiveLap";
@@ -16,6 +16,22 @@ function App() {
   const [slowLapTime, setSlowLapTime] = useState(Number.NEGATIVE_INFINITY);
   const [fastLapIndex, setFastLapIndex] = useState(0);
   const [fastLapTime, setFastLapTime] = useState(Number.POSITIVE_INFINITY);
+  const [lapContainerHeight, setLapContainerHeight] = useState(0);
+  const [lapRowHeight, setLapRowHeight] = useState(0);
+
+  const lapcontainerref = useCallback((node) => {
+    if (node !== null) {
+      setLapContainerHeight(node.getBoundingClientRect().height);
+      console.log("container height: ", node.getBoundingClientRect().height);
+    }
+  }, []);
+  const laprowref = useCallback((node) => {
+    if (node !== null) {
+      setLapRowHeight(node.getBoundingClientRect().height);
+      console.log("row height: ", node.getBoundingClientRect().height);
+    }
+  }, []);
+
   useEffect(startStopStopwatch, [isTimerRunning]);
 
   function startStopStopwatch() {
@@ -47,6 +63,8 @@ function App() {
       .padStart(2, "0")}.${centi.toString().padStart(2, "0")}`;
   }
 
+  function createBlankRows() {}
+
   function reset() {
     setTotalElapsedTime(0);
     setSumOfAllLapTimes(0);
@@ -75,7 +93,7 @@ function App() {
         setSumOfAllLapTimes={setSumOfAllLapTimes}
         reset={reset}
       />
-      <ul className="lap-container">
+      <ul className="lap-container" ref={lapcontainerref}>
         {totalElapsedTime > 0 ? (
           <LiveLap
             totalElapsedTime={totalElapsedTime}
@@ -83,7 +101,12 @@ function App() {
             formatTime={formatTime}
             laps={laps}
           />
-        ) : null}
+        ) : (
+          <li className="row-container blank-row" ref={laprowref}>
+            <p>-</p>
+            <p>-</p>
+          </li>
+        )}
         <Laps
           laps={laps}
           slowLapTime={slowLapTime}
@@ -96,6 +119,7 @@ function App() {
           setFastLapIndex={setFastLapIndex}
         />
       </ul>
+      {createBlankRows()}
     </main>
   );
 }
