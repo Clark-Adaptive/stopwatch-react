@@ -2,11 +2,11 @@
   font-variant-numeric: tabular-nums;
 }
 
-.max-lap {
+.slow-lap {
   color: rgb(255, 69, 58);
 }
 
-.min-lap {
+.fast-lap {
   color: rgb(48, 209, 88);
 }
 

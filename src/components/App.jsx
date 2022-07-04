@@ -54,7 +54,6 @@ function App() {
       <Time totalElapsedTime={totalElapsedTime} formatTime={formatTime} />
       <Buttons
         totalElapsedTime={totalElapsedTime}
-        formatTime={formatTime}
         isTimerRunning={isTimerRunning}
         setIsTimerRunning={setIsTimerRunning}
         laps={laps}
@@ -72,7 +71,7 @@ function App() {
             laps={laps}
           />
         ) : null}
-        <Laps laps={laps} totalElapsedTime={totalElapsedTime} />
+        <Laps laps={laps} formatTime={formatTime} />
       </ul>
     </main>
   );
