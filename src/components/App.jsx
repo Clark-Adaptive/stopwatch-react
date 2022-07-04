@@ -64,12 +64,14 @@ function App() {
         reset={reset}
       />
       <ul className="lap-container">
-        <LiveLap
-          totalElapsedTime={totalElapsedTime}
-          sumOfAllLapTimes={sumOfAllLapTimes}
-          formatTime={formatTime}
-          laps={laps}
-        />
+        {totalElapsedTime > 0 ? (
+          <LiveLap
+            totalElapsedTime={totalElapsedTime}
+            sumOfAllLapTimes={sumOfAllLapTimes}
+            formatTime={formatTime}
+            laps={laps}
+          />
+        ) : null}
         <Laps laps={laps} totalElapsedTime={totalElapsedTime} />
       </ul>
     </main>
