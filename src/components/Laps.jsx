@@ -7,13 +7,14 @@ function Laps({ laps }) {
   const [fastLapIndex, setFastLapIndex] = useState(0);
   const [fastLapTime, setFastLapTime] = useState(Number.POSITIVE_INFINITY);
 
-  return (
-    <ul className="lap-container">
-      {laps.map((lap) => (
-        <li key={lap.number}>{lap.number + " " + lap.time}</li>
-      ))}
-    </ul>
-  );
+  return laps
+    .map((lap) => (
+      <li className="row-container" key={lap.number}>
+        <p>Lap {lap.number}</p>
+        <p>{lap.time}</p>
+      </li>
+    ))
+    .reverse();
 }
 
 export default Laps;

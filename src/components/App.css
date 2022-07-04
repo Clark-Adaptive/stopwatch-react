@@ -20,6 +20,15 @@ body {
   /* background: teal; */
 }
 
+.lap-container {
+  overflow: auto;
+  height: 500px;
+  max-height: 500px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 90%;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }

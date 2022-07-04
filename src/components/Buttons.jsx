@@ -3,6 +3,7 @@ import "./Buttons.css";
 //component
 function Buttons({
   totalElapsedTime,
+  formatTime,
   isTimerRunning,
   setIsTimerRunning,
   laps,
@@ -12,10 +13,12 @@ function Buttons({
   reset,
 }) {
   function handleLap() {
-    console.log(laps);
     updateLaps((current) => [
       ...current,
-      { number: laps.length + 1, time: totalElapsedTime - sumOfAllLapTimes },
+      {
+        number: laps.length + 1,
+        time: formatTime(totalElapsedTime - sumOfAllLapTimes),
+      },
     ]);
     setSumOfAllLapTimes(totalElapsedTime);
   }

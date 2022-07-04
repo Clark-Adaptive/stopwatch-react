@@ -3,6 +3,7 @@ import "./App.css";
 
 import Time from "./Time";
 import Buttons from "./Buttons";
+import LiveLap from "./LiveLap";
 import Laps from "./Laps";
 
 function App() {
@@ -29,6 +30,19 @@ function App() {
     }
   }
 
+  function formatTime(milliseconds) {
+    let centi;
+    centi = Math.floor(milliseconds / 10);
+    let min = Math.floor(centi / 6000);
+    centi -= min * 6000;
+    let sec = Math.floor(centi / 100);
+    centi -= sec * 100;
+
+    return `${min.toString().padStart(2, "0")}:${sec
+      .toString()
+      .padStart(2, "0")}.${centi.toString().padStart(2, "0")}`;
+  }
+
   function reset() {
     setTotalElapsedTime(0);
     setSumOfAllLapTimes(0);
@@ -37,10 +51,10 @@ function App() {
 
   return (
     <main className="content-container">
-      <Time totalElapsedTime={totalElapsedTime} />
+      <Time totalElapsedTime={totalElapsedTime} formatTime={formatTime} />
       <Buttons
         totalElapsedTime={totalElapsedTime}
-        setTotalElapsedTime={setTotalElapsedTime}
+        formatTime={formatTime}
         isTimerRunning={isTimerRunning}
         setIsTimerRunning={setIsTimerRunning}
         laps={laps}
@@ -49,7 +63,15 @@ function App() {
         setSumOfAllLapTimes={setSumOfAllLapTimes}
         reset={reset}
       />
-      <Laps laps={laps} totalElapsedTime={totalElapsedTime} />
+      <ul className="lap-container">
+        <LiveLap
+          totalElapsedTime={totalElapsedTime}
+          sumOfAllLapTimes={sumOfAllLapTimes}
+          formatTime={formatTime}
+          laps={laps}
+        />
+        <Laps laps={laps} totalElapsedTime={totalElapsedTime} />
+      </ul>
     </main>
   );
 }
