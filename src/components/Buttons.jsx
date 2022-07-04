@@ -5,6 +5,7 @@ function Buttons({
   totalElapsedTime,
   isTimerRunning,
   setIsTimerRunning,
+  formatTime,
   laps,
   updateLaps,
   sumOfAllLapTimes,
@@ -17,6 +18,7 @@ function Buttons({
       {
         number: laps.length + 1,
         time: totalElapsedTime - sumOfAllLapTimes,
+        formattedTime: formatTime(totalElapsedTime - sumOfAllLapTimes),
       },
     ]);
     setSumOfAllLapTimes(totalElapsedTime);

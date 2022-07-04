@@ -1,24 +1,27 @@
 import "./Laps.css";
 import { useState, useEffect } from "react";
 
-function Laps({ laps, formatTime }) {
-  const [slowLapIndex, setSlowLapIndex] = useState(0);
-  const [slowLapTime, setSlowLapTime] = useState(Number.NEGATIVE_INFINITY);
-  const [fastLapIndex, setFastLapIndex] = useState(0);
-  const [fastLapTime, setFastLapTime] = useState(Number.POSITIVE_INFINITY);
-
+function Laps({
+  laps,
+  slowLapTime,
+  slowLapIndex,
+  setSlowLapTime,
+  setSlowLapIndex,
+  fastLapTime,
+  fastLapIndex,
+  setFastLapTime,
+  setFastLapIndex,
+}) {
   function checkFastSlowLaps() {
     const mostRecentLap = { ...laps[laps.length - 1] };
     // console.log(mostRecentLap);
     if (mostRecentLap.time > slowLapTime) {
       setSlowLapTime(mostRecentLap.time);
       setSlowLapIndex(mostRecentLap.number);
-      console.log("new slow lap!");
     }
     if (mostRecentLap.time < fastLapTime) {
       setFastLapTime(mostRecentLap.time);
       setFastLapIndex(mostRecentLap.number);
-      console.log("new fast lap!");
     }
   }
 
@@ -35,7 +38,7 @@ function Laps({ laps, formatTime }) {
         key={lap.number}
       >
         <p>Lap {lap.number}</p>
-        <p>{formatTime(lap.time)}</p>
+        <p>{lap.formattedTime}</p>
       </li>
     ))
     .reverse();

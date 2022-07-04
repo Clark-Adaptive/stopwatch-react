@@ -11,7 +11,11 @@ function App() {
   const [totalElapsedTime, setTotalElapsedTime] = useState(0);
   const [laps, updateLaps] = useState([]);
   const [sumOfAllLapTimes, setSumOfAllLapTimes] = useState(0);
-
+  // these useStates should be in the Laps component, but there is no way to communicate to that component to reset it from the Buttons component, where the reset button will be clicked
+  const [slowLapIndex, setSlowLapIndex] = useState(0);
+  const [slowLapTime, setSlowLapTime] = useState(Number.NEGATIVE_INFINITY);
+  const [fastLapIndex, setFastLapIndex] = useState(0);
+  const [fastLapTime, setFastLapTime] = useState(Number.POSITIVE_INFINITY);
   useEffect(startStopStopwatch, [isTimerRunning]);
 
   function startStopStopwatch() {
@@ -47,6 +51,14 @@ function App() {
     setTotalElapsedTime(0);
     setSumOfAllLapTimes(0);
     updateLaps([]);
+    resetFastSlowLaps();
+  }
+
+  function resetFastSlowLaps() {
+    setSlowLapIndex(0);
+    setSlowLapTime(Number.NEGATIVE_INFINITY);
+    setFastLapIndex(0);
+    setFastLapTime(Number.POSITIVE_INFINITY);
   }
 
   return (
@@ -56,6 +68,7 @@ function App() {
         totalElapsedTime={totalElapsedTime}
         isTimerRunning={isTimerRunning}
         setIsTimerRunning={setIsTimerRunning}
+        formatTime={formatTime}
         laps={laps}
         updateLaps={updateLaps}
         sumOfAllLapTimes={sumOfAllLapTimes}
@@ -71,7 +84,17 @@ function App() {
             laps={laps}
           />
         ) : null}
-        <Laps laps={laps} formatTime={formatTime} />
+        <Laps
+          laps={laps}
+          slowLapTime={slowLapTime}
+          slowLapIndex={slowLapIndex}
+          setSlowLapTime={setSlowLapTime}
+          setSlowLapIndex={setSlowLapIndex}
+          fastLapTime={fastLapTime}
+          fastLapIndex={fastLapIndex}
+          setFastLapTime={setFastLapTime}
+          setFastLapIndex={setFastLapIndex}
+        />
       </ul>
     </main>
   );
