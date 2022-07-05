@@ -5,6 +5,7 @@ import Time from "./Time";
 import Buttons from "./Buttons";
 import LiveLap from "./LiveLap";
 import Laps from "./Laps";
+import BlankLaps from "./BlankLaps";
 
 function App() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -18,6 +19,7 @@ function App() {
   const [fastLapTime, setFastLapTime] = useState(Number.POSITIVE_INFINITY);
   const [lapContainerHeight, setLapContainerHeight] = useState(0);
   const [lapRowHeight, setLapRowHeight] = useState(0);
+  const [blankLaps, updateBlankLaps] = useState(createEmptyLapArray());
 
   const lapcontainerref = useCallback((node) => {
     if (node !== null) {
@@ -25,6 +27,7 @@ function App() {
       console.log("container height: ", node.getBoundingClientRect().height);
     }
   }, []);
+
   const laprowref = useCallback((node) => {
     if (node !== null) {
       setLapRowHeight(node.getBoundingClientRect().height);
@@ -33,6 +36,18 @@ function App() {
   }, []);
 
   useEffect(startStopStopwatch, [isTimerRunning]);
+
+  function createEmptyLapArray() {
+    let emptyLaps = [];
+    const numEmptyLaps = Math.floor(lapContainerHeight / lapRowHeight);
+    // for (let a = 0; a < numEmptyLaps - 1; a++) {
+    for (let a = 0; a < 8 - 1; a++) {
+      emptyLaps.push({ number: a, time: "-", formattedTime: "-" });
+    }
+    console.log(emptyLaps);
+
+    return emptyLaps;
+  }
 
   function startStopStopwatch() {
     if (isTimerRunning) {
@@ -63,13 +78,12 @@ function App() {
       .padStart(2, "0")}.${centi.toString().padStart(2, "0")}`;
   }
 
-  function createBlankRows() {}
-
   function reset() {
     setTotalElapsedTime(0);
     setSumOfAllLapTimes(0);
     updateLaps([]);
     resetFastSlowLaps();
+    updateBlankLaps(createEmptyLapArray);
   }
 
   function resetFastSlowLaps() {
@@ -89,6 +103,8 @@ function App() {
         formatTime={formatTime}
         laps={laps}
         updateLaps={updateLaps}
+        blankLaps={blankLaps}
+        updateBlankLaps={updateBlankLaps}
         sumOfAllLapTimes={sumOfAllLapTimes}
         setSumOfAllLapTimes={setSumOfAllLapTimes}
         reset={reset}
@@ -118,8 +134,8 @@ function App() {
           setFastLapTime={setFastLapTime}
           setFastLapIndex={setFastLapIndex}
         />
+        <BlankLaps blankLaps={blankLaps} />
       </ul>
-      {createBlankRows()}
     </main>
   );
 }

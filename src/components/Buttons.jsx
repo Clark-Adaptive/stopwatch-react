@@ -1,3 +1,4 @@
+import BlankLaps from "./BlankLaps";
 import "./Buttons.css";
 
 //component
@@ -8,6 +9,8 @@ function Buttons({
   formatTime,
   laps,
   updateLaps,
+  blankLaps,
+  updateBlankLaps,
   sumOfAllLapTimes,
   setSumOfAllLapTimes,
   reset,
@@ -21,6 +24,11 @@ function Buttons({
         formattedTime: formatTime(totalElapsedTime - sumOfAllLapTimes),
       },
     ]);
+
+    // TODO: implement empty laps and use this update function
+    updateBlankLaps((current) => current.slice(1));
+    console.log(blankLaps);
+
     setSumOfAllLapTimes(totalElapsedTime);
   }
 
