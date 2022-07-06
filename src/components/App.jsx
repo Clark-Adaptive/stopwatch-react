@@ -64,7 +64,6 @@ function App() {
 
   function createEmptyLapArray() {
     let emptyLaps = [];
-    //TODO: figure out why when using this value, the array doesn't render in the beginning, but it does when user clicks reset
     const numEmptyLaps = Math.floor(lapContainerHeight / lapRowHeight);
     for (let a = 0; a < numEmptyLaps - 1; a++) {
       // for (let a = 0; a < 8 - 1; a++) {
