@@ -14,7 +14,6 @@ function Laps({
 }) {
   function checkFastSlowLaps() {
     const mostRecentLap = { ...laps[laps.length - 1] };
-    // console.log(mostRecentLap);
     if (mostRecentLap.time > slowLapTime) {
       setSlowLapTime(mostRecentLap.time);
       setSlowLapIndex(mostRecentLap.number);

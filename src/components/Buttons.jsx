@@ -9,7 +9,6 @@ function Buttons({
   formatTime,
   laps,
   updateLaps,
-  blankLaps,
   updateBlankLaps,
   sumOfAllLapTimes,
   setSumOfAllLapTimes,
@@ -24,11 +23,7 @@ function Buttons({
         formattedTime: formatTime(totalElapsedTime - sumOfAllLapTimes),
       },
     ]);
-
-    // TODO: implement empty laps and use this update function
     updateBlankLaps((current) => current.slice(1));
-    console.log(blankLaps);
-
     setSumOfAllLapTimes(totalElapsedTime);
   }
 

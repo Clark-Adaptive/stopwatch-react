@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import "./App.css";
 import "./Laps.css";
 import Time from "./Time";
@@ -19,33 +19,57 @@ function App() {
   const [fastLapTime, setFastLapTime] = useState(Number.POSITIVE_INFINITY);
   const [lapContainerHeight, setLapContainerHeight] = useState(0);
   const [lapRowHeight, setLapRowHeight] = useState(0);
-  const [blankLaps, updateBlankLaps] = useState(createEmptyLapArray());
+  const [blankLaps, updateBlankLaps] = useState([]);
+  const lapContainerRef = useRef(null);
+  const lapRowRef = useRef(null);
 
-  const lapcontainerref = useCallback((node) => {
-    if (node !== null) {
-      setLapContainerHeight(node.getBoundingClientRect().height);
-      console.log("container height: ", node.getBoundingClientRect().height);
-    }
-  }, []);
+  // const lapcontainerref = useCallback((node) => {
+  //   if (node !== null) {
+  //     setLapContainerHeight(node.getBoundingClientRect().height);
+  //     console.log(
+  //       "lap container height: ",
+  //       node.getBoundingClientRect().height
+  //     );
+  //   }
+  // }, []);
 
-  const laprowref = useCallback((node) => {
-    if (node !== null) {
-      setLapRowHeight(node.getBoundingClientRect().height);
-      console.log("row height: ", node.getBoundingClientRect().height);
-    }
-  }, []);
+  // const laprowref = useCallback((node) => {
+  //   if (node !== null) {
+  //     setLapRowHeight(node.getBoundingClientRect().height);
+  //     console.log("lap row height: ", node.getBoundingClientRect().height);
+  //   }
+  // }, []);
 
   useEffect(startStopStopwatch, [isTimerRunning]);
+  useEffect(() => {
+    if (
+      lapContainerRef.current.clientHeight &&
+      lapRowRef.current.clientHeight
+    ) {
+      setLapContainerHeight(lapContainerRef.current.clientHeight);
+      setLapRowHeight(lapRowRef.current.clientHeight);
+      const numEmptyLaps = Math.floor(
+        lapContainerRef.current.clientHeight / lapRowRef.current.clientHeight
+      );
+
+      updateBlankLaps(
+        Array(numEmptyLaps - 1)
+          .fill({ number: 0, time: "-", formattedTime: "-" })
+          .map((item, index) => ({ ...item, number: index }))
+      );
+    } else {
+      console.log("lapContainerRef or lapRowRef is not a number");
+    }
+  }, []);
 
   function createEmptyLapArray() {
     let emptyLaps = [];
+    //TODO: figure out why when using this value, the array doesn't render in the beginning, but it does when user clicks reset
     const numEmptyLaps = Math.floor(lapContainerHeight / lapRowHeight);
-    // for (let a = 0; a < numEmptyLaps - 1; a++) {
-    for (let a = 0; a < 8 - 1; a++) {
+    for (let a = 0; a < numEmptyLaps - 1; a++) {
+      // for (let a = 0; a < 8 - 1; a++) {
       emptyLaps.push({ number: a, time: "-", formattedTime: "-" });
     }
-    console.log(emptyLaps);
-
     return emptyLaps;
   }
 
@@ -57,7 +81,6 @@ function App() {
         setTotalElapsedTime(Date.now() - startTime + totalElapsedTime);
       }, 1000 / 60);
       return () => {
-        // console.log("clearing interval");
         clearInterval(intervalID);
       };
     } else {
@@ -109,7 +132,7 @@ function App() {
         setSumOfAllLapTimes={setSumOfAllLapTimes}
         reset={reset}
       />
-      <ul className="lap-container" ref={lapcontainerref}>
+      <ul className="lap-container" ref={lapContainerRef}>
         {totalElapsedTime > 0 ? (
           <LiveLap
             totalElapsedTime={totalElapsedTime}
@@ -118,7 +141,7 @@ function App() {
             laps={laps}
           />
         ) : (
-          <li className="row-container blank-row" ref={laprowref}>
+          <li className="row-container blank-row" ref={lapRowRef}>
             <p>-</p>
             <p>-</p>
           </li>
