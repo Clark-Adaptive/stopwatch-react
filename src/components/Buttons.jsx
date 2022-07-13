@@ -3,6 +3,8 @@ import "./Buttons.css";
 
 //component
 function Buttons({
+  state,
+  dispatch,
   totalElapsedTime,
   isTimerRunning,
   setIsTimerRunning,
@@ -32,24 +34,26 @@ function Buttons({
       <button
         id="left-button"
         className={
-          "apple-button " + (isTimerRunning ? "lap-button" : "reset-button")
+          "apple-button " +
+          (state.isTimerRunning ? "lap-button" : "reset-button")
         }
         onClick={() => {
-          isTimerRunning ? handleLap() : reset();
+          state.isTimerRunning ? handleLap() : reset();
         }}
       >
-        {isTimerRunning ? "Lap" : "Reset"}
+        {state.isTimerRunning ? "Lap" : "Reset"}
       </button>
       <button
         id="right-button"
         className={
-          "apple-button " + (isTimerRunning ? "stop-button" : "start-button")
+          "apple-button " +
+          (state.isTimerRunning ? "stop-button" : "start-button")
         }
         onClick={() => {
-          isTimerRunning ? setIsTimerRunning(false) : setIsTimerRunning(true);
+          dispatch({ type: "TOGGLE_START_STOP" });
         }}
       >
-        {isTimerRunning ? "Stop" : "Start"}
+        {state.isTimerRunning ? "Stop" : "Start"}
       </button>
     </section>
   );

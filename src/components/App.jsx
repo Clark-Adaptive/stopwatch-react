@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef, useReducer } from "react";
 import "./App.css";
 import "./Laps.css";
 import Time from "./Time";
@@ -23,24 +23,29 @@ function App() {
   const lapContainerRef = useRef(null);
   const lapRowRef = useRef(null);
 
-  // const lapcontainerref = useCallback((node) => {
-  //   if (node !== null) {
-  //     setLapContainerHeight(node.getBoundingClientRect().height);
-  //     console.log(
-  //       "lap container height: ",
-  //       node.getBoundingClientRect().height
-  //     );
-  //   }
-  // }, []);
+  const initialState = {
+    isTimerRunning: false,
+    startTime: 0,
+    totalElapsedTime: 0,
+  };
 
-  // const laprowref = useCallback((node) => {
-  //   if (node !== null) {
-  //     setLapRowHeight(node.getBoundingClientRect().height);
-  //     console.log("lap row height: ", node.getBoundingClientRect().height);
-  //   }
-  // }, []);
+  function reducer(state, action) {
+    switch (action.type) {
+      case "TOGGLE_START_STOP":
+        return { ...state, isTimerRunning: !state.isTimerRunning };
+      case "RECORD_START_TIME":
+        return { ...state, startTime: Date.now() };
+      case "UPDATE_TIME":
+        return {
+          ...state,
+          totalElapsedTime: Date.now() - state.startTime,
+        };
+    }
+  }
 
-  useEffect(startStopStopwatch, [isTimerRunning]);
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(startStopStopwatch, [state.isTimerRunning]);
   useEffect(() => {
     if (
       lapContainerRef.current.clientHeight &&
@@ -73,11 +78,11 @@ function App() {
   }
 
   function startStopStopwatch() {
-    if (isTimerRunning) {
+    if (state.isTimerRunning) {
       // start the stopwatch
-      let startTime = Date.now();
+      dispatch({ type: "RECORD_START_TIME" });
       const intervalID = setInterval(() => {
-        setTotalElapsedTime(Date.now() - startTime + totalElapsedTime);
+        dispatch({ type: "UPDATE_TIME" });
       }, 1000 / 60);
       return () => {
         clearInterval(intervalID);
@@ -117,8 +122,10 @@ function App() {
 
   return (
     <main className="content-container">
-      <Time totalElapsedTime={totalElapsedTime} formatTime={formatTime} />
+      <Time state={state} formatTime={formatTime} />
       <Buttons
+        state={state}
+        dispatch={dispatch}
         totalElapsedTime={totalElapsedTime}
         isTimerRunning={isTimerRunning}
         setIsTimerRunning={setIsTimerRunning}
