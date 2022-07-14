@@ -6,6 +6,13 @@ import Buttons from "./Buttons";
 import LiveLap from "./LiveLap";
 import Laps from "./Laps";
 import BlankLaps from "./BlankLaps";
+import reducer from "../reducer";
+
+const initialState = {
+  isTimerRunning: false,
+  startTime: 0,
+  totalElapsedTime: 0,
+};
 
 function App() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -22,32 +29,6 @@ function App() {
   const [blankLaps, updateBlankLaps] = useState([]);
   const lapContainerRef = useRef(null);
   const lapRowRef = useRef(null);
-
-  const initialState = {
-    isTimerRunning: false,
-    startTime: 0,
-    totalElapsedTime: 0,
-  };
-
-  function reducer(state, action) {
-    switch (action.type) {
-      case "TOGGLE_START_STOP":
-        return { ...state, isTimerRunning: !state.isTimerRunning };
-      case "RECORD_START_TIME":
-        return { ...state, startTime: Date.now() };
-
-      case "UPDATE_TIME":
-        console.log(Date.now(), state.startTime, Date.now() - state.startTime);
-        return {
-          ...state,
-          totalElapsedTime:
-            state.totalElapsedTime + Date.now() - state.startTime,
-        };
-        break;
-      default:
-        throw new Error();
-    }
-  }
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -84,18 +65,24 @@ function App() {
   }
 
   function startStopStopwatch() {
+    let intervalID;
     if (state.isTimerRunning) {
       // start the stopwatch
-      dispatch({ type: "RECORD_START_TIME" });
-      const intervalID = setInterval(() => {
-        dispatch({ type: "UPDATE_TIME" });
+      const startTime = Date.now();
+      dispatch({ type: "RECORD_START_TIME", payload: startTime });
+      intervalID = setInterval(() => {
+        const totalElapsed = state.totalElapsedTime + Date.now() - startTime;
+        dispatch({
+          type: "UPDATE_TIME",
+          payload: totalElapsed,
+        });
       }, 1000 / 60);
-      return () => {
-        clearInterval(intervalID);
-      };
     } else {
       // stop the stopwatch, at the moment, it seems I don't actually need to do anything
     }
+    return () => {
+      clearInterval(intervalID);
+    };
   }
 
   function formatTime(milliseconds) {
