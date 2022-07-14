@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useReducer } from "react";
+import { useEffect, useRef, useReducer } from "react";
 import "./App.css";
 import "./Laps.css";
 import Time from "./Time";
@@ -20,8 +20,6 @@ function App() {
       lapContainerRef.current.clientHeight &&
       lapRowRef.current.clientHeight
     ) {
-      // setLapContainerHeight(lapContainerRef.current.clientHeight);
-      // setLapRowHeight(lapRowRef.current.clientHeight);
       dispatch({
         type: "SET_LAP_CONTAINER_HEIGHT",
         payload: lapContainerRef.current.clientHeight,
