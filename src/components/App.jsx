@@ -38,7 +38,8 @@ function App() {
       case "UPDATE_TIME":
         return {
           ...state,
-          totalElapsedTime: Date.now() - state.startTime,
+          totalElapsedTime:
+            Date.now() - state.startTime + state.totalElapsedTime,
         };
     }
   }
