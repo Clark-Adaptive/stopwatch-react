@@ -34,13 +34,14 @@ function App() {
       case "TOGGLE_START_STOP":
         return { ...state, isTimerRunning: !state.isTimerRunning };
       case "RECORD_START_TIME":
-        return state.startTime == 0
-          ? { ...state, startTime: Date.now() }
-          : { ...state };
+        return { ...state, startTime: Date.now() };
+
       case "UPDATE_TIME":
+        console.log(state.startTime);
         return {
           ...state,
-          totalElapsedTime: Date.now() - state.startTime,
+          totalElapsedTime:
+            Date.now() - state.startTime + state.totalElapsedTime,
         };
         break;
       default:
