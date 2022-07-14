@@ -37,11 +37,11 @@ function App() {
         return { ...state, startTime: Date.now() };
 
       case "UPDATE_TIME":
-        console.log(state.startTime);
+        console.log(Date.now(), state.startTime, Date.now() - state.startTime);
         return {
           ...state,
           totalElapsedTime:
-            Date.now() - state.startTime + state.totalElapsedTime,
+            state.totalElapsedTime + Date.now() - state.startTime,
         };
         break;
       default:
