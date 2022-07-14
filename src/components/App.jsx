@@ -8,15 +8,7 @@ import Laps from "./Laps";
 import BlankLaps from "./BlankLaps";
 import { initialState, reducer } from "../reducer";
 
-// const initialState = {
-//   isTimerRunning: false,
-//   totalElapsedTime: 0,
-//   laps: [],
-// };
-
 function App() {
-  const [lapContainerHeight, setLapContainerHeight] = useState(0);
-  const [lapRowHeight, setLapRowHeight] = useState(0);
   const lapContainerRef = useRef(null);
   const lapRowRef = useRef(null);
 

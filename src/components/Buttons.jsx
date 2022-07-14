@@ -1,4 +1,3 @@
-import BlankLaps from "./BlankLaps";
 import "./Buttons.css";
 
 //component
