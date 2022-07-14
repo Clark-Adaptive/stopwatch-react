@@ -3,30 +3,36 @@ import "./Buttons.css";
 
 //component
 function Buttons({
-  state,
   dispatch,
-  totalElapsedTime,
   isTimerRunning,
-  setIsTimerRunning,
+  totalElapsedTime,
   formatTime,
   laps,
-  updateLaps,
-  updateBlankLaps,
-  sumOfAllLapTimes,
-  setSumOfAllLapTimes,
-  reset,
+  blankLaps,
+  createEmptyLapArray,
 }) {
   function handleLap() {
-    updateLaps((current) => [
-      ...current,
-      {
-        number: laps.length + 1,
-        time: totalElapsedTime - sumOfAllLapTimes,
-        formattedTime: formatTime(totalElapsedTime - sumOfAllLapTimes),
-      },
-    ]);
-    updateBlankLaps((current) => current.slice(1));
-    setSumOfAllLapTimes(totalElapsedTime);
+    const sumOfAllLapTimes =
+      laps.length > 0
+        ? laps.reduce((accumulator, current) => accumulator + current.time, 0)
+        : 0;
+    dispatch({
+      type: "UPDATE_LAPS",
+      payload: [
+        ...laps,
+        {
+          number: laps.length + 1,
+          time: totalElapsedTime - sumOfAllLapTimes,
+          formattedTime: formatTime(totalElapsedTime - sumOfAllLapTimes),
+        },
+      ],
+    });
+    dispatch({ type: "UPDATE_BLANK_LAPS", payload: blankLaps.slice(1) });
+  }
+
+  function handleReset() {
+    dispatch({ type: "RESET" });
+    createEmptyLapArray();
   }
 
   return (
@@ -34,26 +40,24 @@ function Buttons({
       <button
         id="left-button"
         className={
-          "apple-button " +
-          (state.isTimerRunning ? "lap-button" : "reset-button")
+          "apple-button " + (isTimerRunning ? "lap-button" : "reset-button")
         }
         onClick={() => {
-          state.isTimerRunning ? handleLap() : reset();
+          isTimerRunning ? handleLap() : handleReset();
         }}
       >
-        {state.isTimerRunning ? "Lap" : "Reset"}
+        {isTimerRunning ? "Lap" : "Reset"}
       </button>
       <button
         id="right-button"
         className={
-          "apple-button " +
-          (state.isTimerRunning ? "stop-button" : "start-button")
+          "apple-button " + (isTimerRunning ? "stop-button" : "start-button")
         }
         onClick={() => {
           dispatch({ type: "TOGGLE_START_STOP" });
         }}
       >
-        {state.isTimerRunning ? "Stop" : "Start"}
+        {isTimerRunning ? "Stop" : "Start"}
       </button>
     </section>
   );

@@ -6,27 +6,17 @@ import Buttons from "./Buttons";
 import LiveLap from "./LiveLap";
 import Laps from "./Laps";
 import BlankLaps from "./BlankLaps";
-import reducer from "../reducer";
+import { initialState, reducer } from "../reducer";
 
-const initialState = {
-  isTimerRunning: false,
-  startTime: 0,
-  totalElapsedTime: 0,
-};
+// const initialState = {
+//   isTimerRunning: false,
+//   totalElapsedTime: 0,
+//   laps: [],
+// };
 
 function App() {
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [totalElapsedTime, setTotalElapsedTime] = useState(0);
-  const [laps, updateLaps] = useState([]);
-  const [sumOfAllLapTimes, setSumOfAllLapTimes] = useState(0);
-  // these useStates should be in the Laps component, but there is no way to communicate to that component to reset it from the Buttons component, where the reset button will be clicked
-  const [slowLapIndex, setSlowLapIndex] = useState(0);
-  const [slowLapTime, setSlowLapTime] = useState(Number.NEGATIVE_INFINITY);
-  const [fastLapIndex, setFastLapIndex] = useState(0);
-  const [fastLapTime, setFastLapTime] = useState(Number.POSITIVE_INFINITY);
   const [lapContainerHeight, setLapContainerHeight] = useState(0);
   const [lapRowHeight, setLapRowHeight] = useState(0);
-  const [blankLaps, updateBlankLaps] = useState([]);
   const lapContainerRef = useRef(null);
   const lapRowRef = useRef(null);
 
@@ -38,30 +28,41 @@ function App() {
       lapContainerRef.current.clientHeight &&
       lapRowRef.current.clientHeight
     ) {
-      setLapContainerHeight(lapContainerRef.current.clientHeight);
-      setLapRowHeight(lapRowRef.current.clientHeight);
+      // setLapContainerHeight(lapContainerRef.current.clientHeight);
+      // setLapRowHeight(lapRowRef.current.clientHeight);
+      dispatch({
+        type: "SET_LAP_CONTAINER_HEIGHT",
+        payload: lapContainerRef.current.clientHeight,
+      });
+      dispatch({
+        type: "SET_LAP_ROW_HEIGHT",
+        payload: lapRowRef.current.clientHeight,
+      });
       const numEmptyLaps = Math.floor(
         lapContainerRef.current.clientHeight / lapRowRef.current.clientHeight
       );
 
-      updateBlankLaps(
-        Array(numEmptyLaps - 1)
+      dispatch({
+        type: "UPDATE_BLANK_LAPS",
+        payload: Array(numEmptyLaps - 1)
           .fill({ number: 0, time: "-", formattedTime: "-" })
-          .map((item, index) => ({ ...item, number: index }))
-      );
+          .map((item, index) => ({ ...item, number: index })),
+      });
     } else {
       console.log("lapContainerRef or lapRowRef is not a number");
     }
   }, []);
 
   function createEmptyLapArray() {
-    let emptyLaps = [];
-    const numEmptyLaps = Math.floor(lapContainerHeight / lapRowHeight);
-    for (let a = 0; a < numEmptyLaps - 1; a++) {
-      // for (let a = 0; a < 8 - 1; a++) {
-      emptyLaps.push({ number: a, time: "-", formattedTime: "-" });
-    }
-    return emptyLaps;
+    const numEmptyLaps = Math.floor(
+      state.lapContainerHeight / state.lapRowHeight
+    );
+    dispatch({
+      type: "UPDATE_BLANK_LAPS",
+      payload: Array(numEmptyLaps - 1)
+        .fill({ number: 0, time: "-", formattedTime: "-" })
+        .map((item, index) => ({ ...item, number: index })),
+    });
   }
 
   function startStopStopwatch() {
@@ -69,12 +70,10 @@ function App() {
     if (state.isTimerRunning) {
       // start the stopwatch
       const startTime = Date.now();
-      dispatch({ type: "RECORD_START_TIME", payload: startTime });
       intervalID = setInterval(() => {
-        const totalElapsed = state.totalElapsedTime + Date.now() - startTime;
         dispatch({
           type: "UPDATE_TIME",
-          payload: totalElapsed,
+          payload: state.totalElapsedTime + Date.now() - startTime,
         });
       }, 1000 / 60);
     } else {
@@ -98,46 +97,24 @@ function App() {
       .padStart(2, "0")}.${centi.toString().padStart(2, "0")}`;
   }
 
-  function reset() {
-    setTotalElapsedTime(0);
-    setSumOfAllLapTimes(0);
-    updateLaps([]);
-    resetFastSlowLaps();
-    updateBlankLaps(createEmptyLapArray);
-  }
-
-  function resetFastSlowLaps() {
-    setSlowLapIndex(0);
-    setSlowLapTime(Number.NEGATIVE_INFINITY);
-    setFastLapIndex(0);
-    setFastLapTime(Number.POSITIVE_INFINITY);
-  }
-
   return (
     <main className="content-container">
-      <Time state={state} formatTime={formatTime} />
+      <Time totalElapsedTime={state.totalElapsedTime} formatTime={formatTime} />
       <Buttons
-        state={state}
         dispatch={dispatch}
-        totalElapsedTime={totalElapsedTime}
-        isTimerRunning={isTimerRunning}
-        setIsTimerRunning={setIsTimerRunning}
+        isTimerRunning={state.isTimerRunning}
+        totalElapsedTime={state.totalElapsedTime}
         formatTime={formatTime}
-        laps={laps}
-        updateLaps={updateLaps}
-        blankLaps={blankLaps}
-        updateBlankLaps={updateBlankLaps}
-        sumOfAllLapTimes={sumOfAllLapTimes}
-        setSumOfAllLapTimes={setSumOfAllLapTimes}
-        reset={reset}
+        laps={state.laps}
+        blankLaps={state.blankLaps}
+        createEmptyLapArray={createEmptyLapArray}
       />
       <ul className="lap-container" ref={lapContainerRef}>
-        {totalElapsedTime > 0 ? (
+        {state.totalElapsedTime > 0 ? (
           <LiveLap
-            totalElapsedTime={totalElapsedTime}
-            sumOfAllLapTimes={sumOfAllLapTimes}
+            totalElapsedTime={state.totalElapsedTime}
             formatTime={formatTime}
-            laps={laps}
+            laps={state.laps}
           />
         ) : (
           <li className="row-container blank-row" ref={lapRowRef}>
@@ -145,18 +122,8 @@ function App() {
             <p>-</p>
           </li>
         )}
-        <Laps
-          laps={laps}
-          slowLapTime={slowLapTime}
-          slowLapIndex={slowLapIndex}
-          setSlowLapTime={setSlowLapTime}
-          setSlowLapIndex={setSlowLapIndex}
-          fastLapTime={fastLapTime}
-          fastLapIndex={fastLapIndex}
-          setFastLapTime={setFastLapTime}
-          setFastLapIndex={setFastLapIndex}
-        />
-        <BlankLaps blankLaps={blankLaps} />
+        <Laps laps={state.laps} />
+        <BlankLaps blankLaps={state.blankLaps} />
       </ul>
     </main>
   );

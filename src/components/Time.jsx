@@ -1,12 +1,8 @@
 import "./Time.css";
-import { useState } from "react";
-
-function Time({ state, formatTime }) {
-  // useEffect(,[totalElapsedTime]);
-
+function Time({ totalElapsedTime, formatTime }) {
   return (
     <section className="time-container">
-      <p className="time-text">{formatTime(state.totalElapsedTime)}</p>
+      <p className="time-text">{formatTime(totalElapsedTime)}</p>
     </section>
   );
 }

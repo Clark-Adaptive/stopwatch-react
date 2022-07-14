@@ -1,17 +1,12 @@
 import "./Laps.css";
 import { useState, useEffect } from "react";
 
-function Laps({
-  laps,
-  slowLapTime,
-  slowLapIndex,
-  setSlowLapTime,
-  setSlowLapIndex,
-  fastLapTime,
-  fastLapIndex,
-  setFastLapTime,
-  setFastLapIndex,
-}) {
+function Laps({ laps }) {
+  const [slowLapIndex, setSlowLapIndex] = useState(0);
+  const [slowLapTime, setSlowLapTime] = useState(Number.NEGATIVE_INFINITY);
+  const [fastLapIndex, setFastLapIndex] = useState(0);
+  const [fastLapTime, setFastLapTime] = useState(Number.POSITIVE_INFINITY);
+
   function checkFastSlowLaps() {
     const mostRecentLap = { ...laps[laps.length - 1] };
     if (mostRecentLap.time > slowLapTime) {
